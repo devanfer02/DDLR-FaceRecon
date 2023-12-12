@@ -7,6 +7,11 @@
 ## NOTES
 1. To install face_recognition library, you need to install C++ CMake Tools first. You can follow [this instruction](https://www.youtube.com/watch?v=TC_LPpa7uj0) to install C++ CMake Tools for windows.
 
+## Setup
+1. run command ```pip install -r requirements.txt```
+2. run command ```python app.py``` to run web version
+3. naviate to [main jupyter file](./main.ipynb) and choose run all
+
 ## Explanation
 explanation soon!
 
