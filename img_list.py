@@ -98,7 +98,7 @@ class ImageList :
         # find all face and face encodings in the current frame
         rgb_small = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
         face_locations = fcr.face_locations(rgb_small)
-        face_encodings = fcr.face_encodings(rgb_small, face_locations)
+        face_encodings = fcr.face_encodings(rgb_small, face_locations, model='cnn')
 
         face_names = []
         for face_encoding in face_encodings :
