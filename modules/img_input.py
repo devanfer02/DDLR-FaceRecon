@@ -46,8 +46,25 @@ class ImageInput :
             cv2.rectangle(img, (x1, y1), (x2, y2), rgb_color, 4)
 
         return img
+    
+    def recognize_taken_image(self) -> Response :
+        ok, frame = self.cam.read()
 
-    def recognize_uploaded_image(self, image) -> None :
+        self.stop_streaming()
+
+        if not ok :
+            print('ERR: cant read frame')
+            return 
+
+        frame = cv2.flip(frame, 1)
+        frame = self.__recognize(frame)
+
+        _, buffer = cv2.imencode('.jpg', frame)
+        img_str = buffer.tobytes()
+
+        return Response(img_str, mimetype='image/jpeg')
+
+    def recognize_uploaded_image(self, image) -> Response :
         img_data = image.read()
         img_arr = np.frombuffer(img_data, np.uint8)
         img = cv2.imdecode(img_arr, cv2.IMREAD_COLOR)
@@ -68,6 +85,7 @@ class ImageInput :
                 print('Error: could not read frame')
                 return 
 
+            frame = cv2.flip(frame, 1)
             _, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             
@@ -86,6 +104,7 @@ class ImageInput :
                 print('Error: could not read frame')
                 return 
             
+            frame = cv2.flip(frame, 1)
             frame = self.__recognize(frame)
 
             _, buffer = cv2.imencode('.jpg', frame)

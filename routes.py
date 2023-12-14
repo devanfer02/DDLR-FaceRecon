@@ -7,19 +7,10 @@ def setup_routes(app, img_input: ImageInput) :
         img_input.stop_streaming()
         return render_template('index.html')
 
-    @app.route('/webcam', endpoint='webcam')
-    def webcam() :
-        return render_template('webcam.html')
-
-    @app.route('/docs', endpoint='docs') 
-    def docs() :
+    @app.route('/demo', endpoint='demo') 
+    def demo() :
         img_input.stop_streaming()
-        return render_template('docs.html')
-
-    @app.route('/photo', endpoint='photo') 
-    def photo() :
-        img_input.stop_streaming()
-        return render_template('photo_recon.html')
+        return render_template('demo.html')
 
     @app.route('/video')
     def video() :
@@ -28,6 +19,13 @@ def setup_routes(app, img_input: ImageInput) :
     @app.route('/cam')
     def cam() :
         return img_input.start_streaming(2)
+
+    @app.route('/stopcam', methods=['POST'])
+    def stop_cam() :
+        img_input.stop_streaming()
+        return jsonify({
+            'message' : 'successfully stop video'
+        })
 
     @app.route('/recognize', methods=['POST'])
     def recognize() :
@@ -39,4 +37,8 @@ def setup_routes(app, img_input: ImageInput) :
             })
 
         return img_input.recognize_uploaded_image(uploaded_file)
+
+    @app.route('/takeimg', methods=['POST'])
+    def take_img() :
+        return img_input.recognize_taken_image()
         
