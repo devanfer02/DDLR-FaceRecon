@@ -1,3 +1,0 @@
-TODO : 
-    - buat toggle button di webcam
-    - buat info juga pas bagian webcam

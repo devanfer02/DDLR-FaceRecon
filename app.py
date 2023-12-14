@@ -1,7 +1,7 @@
-from flask import Flask, Response, render_template
+from flask import Flask
 from modules.img_list import ImageList
 from modules.img_input import ImageInput
-from routes import setup_routes
+from routes.routes import setup_routes
 import cv2 
 
 app = Flask(__name__, static_url_path='/static')
