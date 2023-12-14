@@ -1,4 +1,4 @@
-from flask import render_template, Response 
+from flask import render_template 
 from modules.img_input import ImageInput
 
 def setup_routes(app, img_input: ImageInput) :
@@ -16,13 +16,8 @@ def setup_routes(app, img_input: ImageInput) :
         img_input.stop_streaming()
         return render_template('docs.html')
 
-    @app.route('/team', endpoint='team') 
-    def team() :
-        img_input.stop_streaming()
-        return render_template('team.html')
-
     @app.route('/photo', endpoint='photo') 
-    def team() :
+    def photo() :
         img_input.stop_streaming()
         return render_template('photo_recon.html')
 

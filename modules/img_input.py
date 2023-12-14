@@ -7,6 +7,7 @@ class ImageInput :
     def __init__(self, img_list: ImageList, dimensions: Tuple[int, int] = (800, 600), recon: bool =True) :
         self.img_list = img_list
         self.dimensions = dimensions
+        self.cam = cv2.VideoCapture(0)
 
         self.recon = recon
 
@@ -21,6 +22,7 @@ class ImageInput :
         self.streaming = False 
 
     def stop_streaming(self) -> None :
+        self.cam.release()
         self.streaming = False 
     
     def start_streaming(self) -> None :
@@ -28,15 +30,12 @@ class ImageInput :
         return Response(self.play_web_cam(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def play_web_cam(self) -> None :
-        cam = cv2.VideoCapture(0)
-
-        cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.dimensions[0])
-        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, self.dimensions[1])
+        self.cam.open(0)
         
         while self.streaming :
 
             # read frame from camera
-            ok, frame = cam.read()
+            ok, frame = self.cam.read()
 
             if not ok :
                 print('Error: could not read frame')
@@ -57,6 +56,3 @@ class ImageInput :
             
             yield(b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-        cam.release()
-        
