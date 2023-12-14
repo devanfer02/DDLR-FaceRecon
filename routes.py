@@ -1,4 +1,4 @@
-from flask import render_template 
+from flask import render_template, request, jsonify
 from modules.img_input import ImageInput
 
 def setup_routes(app, img_input: ImageInput) :
@@ -23,5 +23,20 @@ def setup_routes(app, img_input: ImageInput) :
 
     @app.route('/video')
     def video() :
-        return img_input.start_streaming()
+        return img_input.start_streaming(1)
+    
+    @app.route('/cam')
+    def cam() :
+        return img_input.start_streaming(2)
 
+    @app.route('/recognize', methods=['POST'])
+    def recognize() :
+        uploaded_file = request.files['file']
+
+        if uploaded_file.filename == '' :
+            return jsonify({
+                'error': 'no file uplaoded'
+            })
+
+        return img_input.recognize_uploaded_image(uploaded_file)
+        
