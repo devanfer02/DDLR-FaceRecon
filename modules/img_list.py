@@ -11,7 +11,6 @@ from typing import Tuple
 class ImageList :
     def __init__(self, list_names: List[str], base_path: str) -> None: 
         # constructor
-        self.image_map = {}
         self.known_encoded = []
         self.known_names = []
         self.base_path = base_path.rstrip('/')
@@ -50,10 +49,9 @@ class ImageList :
         }
 
         self.model.fit(known_data['encodings'], known_data['names'])
-        
 
-        pickle.dump(self.model, open(self.model_filename + '.sav', 'wb'))
-        joblib.dump(known_data, self.model_filename + '.joblib')
+        pickle.dump(self.model, open(self.model_filename, 'wb'))
+        joblib.dump(known_data, self.joblib_filename)
 
     def __use_existing(self) :
         print('Using existing model data')
@@ -73,7 +71,6 @@ class ImageList :
 
         if len(names_new) != 0 :
             self.__save_data()
-        
 
     def __encode_person_image(self, name) :
         print(f'Encoding {name} images in process')
@@ -85,7 +82,10 @@ class ImageList :
             return 
 
         for img_path in person_images :
-            
+            if img_path.lower().endswith('.heic') :
+                print(f'skipping {img_path} file')
+                continue
+
             faces = fcr.load_image_file(img_path)
             face_locations = fcr.face_locations(faces)
             face_encodings = fcr.face_encodings(faces, face_locations)
@@ -99,17 +99,21 @@ class ImageList :
             self.known_encoded.append(img_encoded)
             self.known_names.append(name)
 
+            print(f'Encoded {img_path} image')
+
         print(f'Encoding {name} images done')
+        print('-' * 40)
     
     def detect_faces(self, frame) -> Tuple[int, List[str]] :
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
         
         # find all face and face encodings in the current frame
         rgb_small = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
-        face_locations = fcr.face_locations(rgb_small)
-        face_encodings = fcr.face_encodings(rgb_small, face_locations)
+        face_locations = fcr.face_locations(cv2.cvtColor(rgb_small, cv2.COLOR_BGR2RGB))
+        face_encodings = fcr.face_encodings(small_frame, face_locations)
 
         face_names = []
+        
         for face_encoding in face_encodings :
             id_predict = self.model.predict([face_encoding])
             name = 'ndak tau saya' if len(id_predict) == 0 else id_predict[0]
