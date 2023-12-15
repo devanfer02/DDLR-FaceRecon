@@ -5,6 +5,30 @@ const CONF = {
   video: 'cam_is_playing',
 }
 
+function other_cam_is_playing(btn) {
+  return (btn.classList.contains('bg-white') && 
+  (CONF.cam_is_playing || CONF.recon_cam_is_playing)) 
+}
+
+function enable_btns() {
+  const live = document.getElementById('toggle-live')
+  const cam = document.getElementById('toggle-cam')
+
+  cam.style.cursor = 'pointer'
+  live.style.cursor = 'pointer'
+}
+
+function disable_other_btn(btn) {
+  const live = document.getElementById('toggle-live')
+  const cam = document.getElementById('toggle-cam')
+
+  if (btn !== live) {
+    live.style.cursor = 'not-allowed'
+  } else {
+    cam.style.cursor = 'not-allowed'
+  }
+}
+
 function toggle_nav() {
   const navs = document.getElementById('nav-links')
 
@@ -15,14 +39,22 @@ function toggle_nav() {
   }
 }
 
+function toggle_btn(btn) {
+  if(btn.classList.contains('bg-white')) {
+    btn.classList.remove('bg-white')
+    btn.classList.remove('text-black')
+    btn.classList.add('bg-black')
+    btn.classList.add('text-white')
+  } else {
+    btn.classList.remove('bg-black')
+    btn.classList.remove('text-white')
+    btn.classList.add('bg-white')
+    btn.classList.add('text-black')
+  }
+}
+
 function hide_loading(id_tag) {
   document.getElementById(id_tag).classList.add('hidden')
-
-  const video = document.getElementById('video')
-  if (video) {
-    document.getElementById('video').classList.remove('hidden')
-    document.getElementById('video').classList.add('flex')
-  }
 }
 
 function give_loading(title) {
@@ -36,9 +68,15 @@ function give_loading(title) {
   document.getElementById('loading-recon').classList.add('flex')
 }
 
+function give_info() {
+  document.getElementById('info-recon').classList.remove('hidden')
+  document.getElementById('info-recon').classList.add('flex') 
+}
+
 function upload_image() {
   give_loading('Loading Result')
 
+  const div = document.getElementById('div-img-result')
   const res_img = document.getElementById('img-result')
   const file_input = document.getElementById('img-input')
   const file = file_input.files[0]
@@ -60,6 +98,7 @@ function upload_image() {
   .then(blob => {
     const img_url = URL.createObjectURL(blob)
     
+    div.style.display = 'flex'
     res_img.src = img_url
   })
   .catch(err => console.log(err))
@@ -70,27 +109,36 @@ async function toggle_camera(key, id) {
     const div = document.getElementById('div-img-result')
     const img = document.getElementById('img-result')
     const btn = document.getElementById(id)
-  
+
+    if (other_cam_is_playing(btn)) {
+      return 
+    }
+
     if (CONF[CONF[key]]) {
       await fetch('/stopcam', {method: 'POST'})
       CONF[CONF[key]] = false
       
       img.src = ''
       btn.innerHTML = btn.innerHTML.replace('Off', 'On')
-      btn.style.backgroundColor = '#FFF'
-      btn.style.color = '#000'
+      toggle_btn(btn)
+      
       div.style.display = 'none'
+      hide_loading('loading-recon')
+      give_info()
+      enable_btns()
     } else {
+      
       give_loading('Loading Camera')
-    
+      disable_other_btn(btn)
+      
       btn.innerHTML = btn.innerHTML.replace('On', 'Off')
-      btn.style.backgroundColor = '#000'
-      btn.style.color = '#FFF'
-      img.src = `/${key}`
+      toggle_btn(btn)
+      
+      img.src = `/${key}?t=${new Date().getTime()}`
       CONF[CONF[key]] = true
       div.style.display = 'flex'
     }
-  
+    console.log(img.src)
   } catch (e) {
     console.log(e)
   }
@@ -103,8 +151,7 @@ async function take_image() {
       
   img.src = ''
   btn.innerHTML = 'Toggle On Camera'
-  btn.style.backgroundColor = '#FFF'
-  btn.style.color = '#000'
+  toggle_btn(btn)
 
   const res = await fetch('/takeimg', {method:'POST'})
   const blob = await res.blob()

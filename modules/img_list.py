@@ -3,6 +3,8 @@ import os
 import face_recognition as fcr
 import numpy as np
 import joblib
+import pickle
+from sklearn.svm import SVC
 from typing import List
 from typing import Tuple
 
@@ -15,7 +17,9 @@ class ImageList :
         self.base_path = base_path.rstrip('/')
         self.list_names = list_names
         self.total_images = 0
-        self.model_filename = 'data/face_data.joblib'
+        self.model_filename = 'data/face_data.sav'
+        self.joblib_filename = 'data/face_data.joblib'
+        self.model = SVC()
 
         self.__start_encode()
         
@@ -44,12 +48,18 @@ class ImageList :
             'encodings': self.known_encoded,
             'names': self.known_names
         }
-        joblib.dump(known_data, self.model_filename)
+
+        self.model.fit(known_data['encodings'], known_data['names'])
+        
+
+        pickle.dump(self.model, open(self.model_filename + '.sav', 'wb'))
+        joblib.dump(known_data, self.model_filename + '.joblib')
 
     def __use_existing(self) :
-        print('Using existing encoding data')
+        print('Using existing model data')
             
-        loaded_known_data = joblib.load(self.model_filename)
+        loaded_known_data = joblib.load(self.joblib_filename)
+        self.model = joblib.load(self.model_filename)
         self.known_encoded = loaded_known_data['encodings']
         self.known_names = loaded_known_data['names']
 
@@ -75,11 +85,10 @@ class ImageList :
             return 
 
         for img_path in person_images :
-            img = cv2.imread(img_path)
-
-            # need to convert color since opencv use bgr and face_recognition use rgb
-            rgb_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            face_encodings = fcr.face_encodings(rgb_img)
+            
+            faces = fcr.load_image_file(img_path)
+            face_locations = fcr.face_locations(faces)
+            face_encodings = fcr.face_encodings(faces, face_locations)
             
             if len(face_encodings) == 0 :
                 print(f'No face detected in image file: {img_path}')
@@ -98,22 +107,12 @@ class ImageList :
         # find all face and face encodings in the current frame
         rgb_small = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
         face_locations = fcr.face_locations(rgb_small)
-        face_encodings = fcr.face_encodings(rgb_small, face_locations, model='cnn')
+        face_encodings = fcr.face_encodings(rgb_small, face_locations)
 
         face_names = []
         for face_encoding in face_encodings :
-            matches = fcr.compare_faces(self.known_encoded, face_encoding)
-            name = 'ndak tau saya'
-
-            # if match was found, use the first one
-            if True in matches :
-                match_index = matches.index(True)
-                name = self.known_names[match_index]
-
-            face_distances = fcr.face_distance(self.known_encoded, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index] :
-                name = self.known_names[match_index]
+            id_predict = self.model.predict([face_encoding])
+            name = 'ndak tau saya' if len(id_predict) == 0 else id_predict[0]
 
             face_names.append(name)
 

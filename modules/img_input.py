@@ -23,8 +23,8 @@ class ImageInput :
         self.streaming = False 
 
     def stop_streaming(self) -> None :
-        self.cam.release()
         self.streaming = False 
+        self.cam.release()
     
     def start_streaming(self, option: int = 1) -> None :
         self.streaming = True 
@@ -42,7 +42,7 @@ class ImageInput :
 
             rgb_color = self.rgb_colors[name]
 
-            cv2.putText(img, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, rgb_color, 2)
+            cv2.putText(img, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, fontScale=1.2, color=rgb_color, thickness=1)
             cv2.rectangle(img, (x1, y1), (x2, y2), rgb_color, 4)
 
         return img
@@ -77,13 +77,13 @@ class ImageInput :
 
     def play_webcam(self) -> None :
         self.cam.open(0)
-
+        
         while self.streaming :
             ok, frame = self.cam.read()
-
+            
             if not ok :
                 print('Error: could not read frame')
-                return 
+                break
 
             frame = cv2.flip(frame, 1)
             _, buffer = cv2.imencode('.jpg', frame)
