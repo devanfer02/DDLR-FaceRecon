@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify
 from modules.img_input import ImageInput
 
 def setup_routes(app, img_input: ImageInput) :
+    
     @app.route('/', endpoint='home')
     def index() :
         img_input.stop_streaming()

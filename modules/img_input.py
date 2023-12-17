@@ -1,12 +1,12 @@
 import cv2
-from modules.img_list import ImageList
+from modules.img_trainer import ImageTrainer
 from flask import Response
 from typing import Tuple
 import numpy as np 
 
 class ImageInput :
-    def __init__(self, img_list: ImageList, dimensions: Tuple[int, int] = (800, 600), recon: bool =True) :
-        self.img_list = img_list
+    def __init__(self, img_trainer: ImageTrainer, dimensions: Tuple[int, int] = (800, 600), recon: bool =True) :
+        self.img_trainer = img_trainer
         self.dimensions = dimensions
         self.cam = cv2.VideoCapture(0)
 
@@ -35,7 +35,7 @@ class ImageInput :
             return Response(self.play_webcam(), mimetype='multipart/x-mixed-replace; boundary=frame')
     
     def __recognize(self, img) :
-        face_locs, names = self.img_list.detect_faces(img)
+        face_locs, names = self.img_trainer.detect_faces(img)
 
         for face_loc, name in zip(face_locs, names) :
             y1, x2, y2, x1 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]

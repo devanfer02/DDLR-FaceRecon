@@ -8,12 +8,12 @@ from sklearn.svm import SVC
 from typing import List
 from typing import Tuple
 
-class ImageList :
-    def __init__(self, list_names: List[str], base_path: str) -> None: 
+class ImageTrainer :
+    def __init__(self, list_names: List[str], base_img_path: str) -> None: 
         # constructor
         self.known_encoded = []
         self.known_names = []
-        self.base_path = base_path.rstrip('/')
+        self.base_img_path = base_img_path.rstrip('/')
         self.list_names = list_names
         self.total_images = 0
         self.model_filename = 'data/face_data.sav'
@@ -37,8 +37,8 @@ class ImageList :
 
     def __get_all_img(self, person_name: str) -> List[str] :
         file_names = [
-            f'{self.base_path}/{person_name}/{file_name}' 
-            for file_name in os.listdir(f'{self.base_path}/{person_name}/')
+            f'{self.base_img_path}/{person_name}/{file_name}' 
+            for file_name in os.listdir(f'{self.base_img_path}/{person_name}/')
         ]
         return file_names
 
@@ -109,8 +109,8 @@ class ImageList :
         
         # find all face and face encodings in the current frame
         rgb_small = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
-        face_locations = fcr.face_locations(cv2.cvtColor(rgb_small, cv2.COLOR_BGR2RGB))
-        face_encodings = fcr.face_encodings(small_frame, face_locations)
+        face_locations = fcr.face_locations(rgb_small)
+        face_encodings = fcr.face_encodings(rgb_small, face_locations)
 
         face_names = []
         
