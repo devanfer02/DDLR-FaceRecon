@@ -6,7 +6,10 @@ import cv2
 
 app = Flask(__name__, static_url_path='/static')
 cam = cv2.VideoCapture(0)
-img_list = ImageTrainer(['devan','dayu','leo', 'rahmat'], 'img')
+img_list = ImageTrainer(
+    list_names=['devan','dayu','leo', 'rahmat'], 
+    base_img_path='img'
+)
 img_input = ImageInput(img_list)
 
 setup_routes(app, img_input)
