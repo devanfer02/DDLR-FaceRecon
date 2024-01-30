@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .dot {
+        opacity: 0;
+        animation: showHideDot 2.5s ease-in-out infinite;
+        &.one { animation-delay: 0.2s; }
+        &.two { animation-delay: 0.4s; }
+        &.three { animation-delay: 0.6s; }
+        &.four { animation-delay: 0.8s; }
+    }
+    
+    @keyframes showHideDot {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        60% { opacity: 1; }
+        100% { opacity: 0; }
+    }    
+}

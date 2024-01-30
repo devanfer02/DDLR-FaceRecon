@@ -1,0 +1,122 @@
+{% extends 'layout.html' %}
+
+{% block title %}Photo{% endblock %}
+
+{% block content %}
+    <div class="mt-5 text-white mb-10">
+      <div class="container">
+        <div class="flex flex-wrap mt-5">
+          <div class="border-white border rounded-lg p-5 w-full lg:w-1/4 ">
+            <h1 class="text-2xl font-semibold">
+              Choose Your Image
+            </h1>
+            <hr class="h-[0.01em] bg-white mt-1">
+            <p class="mt-3">
+              You can choose image that contains our team's face or not and then submit it to see the results
+            </p>
+            <div class="mt-5">
+              <form action="" enctype="" class="form-user">
+                <div class="my-5">
+                  <input 
+                    type="file" accept="image/*"    
+                    class="block w-full text-sm text-white
+                    border border-white rounded-l-md cursor-pointer
+                    hover:file:bg-black hover:file:text-white
+                    file:mr-4 file:py-2 file:px-4 file:rounded-md
+                    file:border-0 file:text-sm file:font-semibold
+                  file:bg-white file:text-black"
+                    id="img-input"
+                  >
+                </div>
+                <button
+                  class="mr-2 mt-1 bg-white text-black rounded-lg px-4 py-2 font-semibold border border-white hover:bg-black hover:text-white duration-200 ease-in-out"
+                  onclick="upload_image()"
+                >
+                  Recognize
+                </button>
+              </form>
+            </div>
+            <h1 class="text-2xl font-semibold mt-5">
+              Live Webcam
+            </h1>
+            <hr class="h-[0.01em] bg-white mt-1">
+            <p class="mt-3">
+              Live Face Recognition using webcam
+            </p>
+            <div class="mt-5">
+              <form action="" enctype="" class="form-user">
+                <input type="file" accept="image/*" class="hidden" id="hidden-img-input">
+                <button
+                  class="mr-2 mt-1 bg-white text-black rounded-lg px-4 py-2 font-semibold border border-white hover:bg-black hover:text-white duration-200 ease-in-out"
+                  onclick="toggle_camera('video', 'toggle-live')"
+                  id="toggle-live"
+                >
+                  Toggle On Live Recognize
+                </button>
+              </form>
+            </div>
+            <h1 class="text-2xl font-semibold mt-5">
+              Take Photo
+            </h1>
+            <hr class="h-[0.01em] bg-white mt-1">
+            <p class="mt-3">
+              Take new photo from your camera
+            </p>
+            <div class="mt-5">
+              <form action="" enctype="" class="form-user">
+                <input type="file" accept="image/*" class="hidden" id="hidden-img-input">
+                <button
+                  class="mr-2 mt-1 bg-white text-black rounded-lg px-4 py-2 font-semibold border border-white hover:bg-black hover:text-white duration-200 ease-in-out"
+                  onclick="toggle_camera('cam', 'toggle-cam')"
+                  id="toggle-cam"
+                >
+                  Toggle On Camera
+                </button>
+                <button
+                  class="mr-2 mt-1 bg-white text-black rounded-lg px-4 py-2 font-semibold border border-white hover:bg-black hover:text-white duration-200 ease-in-out"
+                  onclick="take_image()"
+                >
+                  Recognize
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="border-white border rounded-lg p-5 w-full lg:w-3/4">
+            <h1 class="text-2xl font-semibold">
+              Image Result
+            </h1>
+            <hr class="h-[0.01em] bg-white mt-1">
+            <div class="flex items-center justify-center self-center h-full" id="info-recon">
+              <h1 class="text-white text-center font-semibold text-xl my-auto">
+                Submit Image First
+              </h1>
+            </div>
+            <div class="items-center justify-center hidden self-center h-full" id="loading-recon">
+              <div class="my-auto mex-auto">
+                <h1 class="text-white text-2xl font-bold" id="load-recon-title">
+                  Loading Result
+                </h1>
+                <div class="flex text-center justify-center">
+                  <h1 class="dot one text-white text-7xl font-bold inline relative mx-3 -top-[0.5em]">
+                    .
+                  </h1>
+                  <h1 class="dot two text-white text-7xl font-bold inline relative mx-3 -top-[0.5em]">
+                    .
+                  </h1>
+                  <h1 class="dot three text-white text-7xl font-bold inline relative mx-3 -top-[0.5em]">
+                    .
+                  </h1>
+                  <h1 class="dot four text-white text-7xl font-bold inline relative mx-3 -top-[0.5em]">
+                    .
+                  </h1>
+                </div>
+              </div>
+            </div>
+            <div class="hidden flex-wrap jusitfy-center items-center self-center h-full" id="div-img-result">
+              <img src="" alt="" id="img-result" class="max-h-[500px] mx-auto my-auto" onload="hide_loading('loading-recon')">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

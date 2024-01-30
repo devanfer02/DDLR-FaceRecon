@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="text-white pt-7">
+      <div class="container">
+        <h1 class="text-4xl text-center mb-5 font-bold">
+          DDLR Face Recognition
+        </h1>
+        <div class="border border-white p-12 my-8 rounded-md">
+          <p class="text-2xl mb-2 font-semibold">
+            What is DDLR Face Recognition?
+          </p>
+          <hr class="h-[0.05em] bg-white w-1/2">
+          <p class="mt-5 text-lg">
+            DDLR Face Recognition is a web application to detect our team's face from a given image.          
+            DDLR itself stands for Devan, Dayu, Leo, Rahmat.
+            DDLR Face Recognition use the help of face_recognition library to recognize faces, opencv to capture frame 
+            and flask for web application.
+            DDLR Face Recognition was made for our final project data science introduction class.
+          </p>
+          <p class="mt-1 text-lg">
+            You can try it by yourself, just make sure you have one of <a href="{{ url_for('home') }}#team" class="">our team's</a> face 
+          </p>
+          <div class="flex flex-wrap mt-2 rounded-md">
+            <a 
+              href="{{ url_for('demo') }}" 
+              class="mr-2 bg-white text-black rounded-lg px-4 py-2 font-semibold border border-white hover:bg-black hover:text-white duration-200 ease-in-out"
+            >
+              Try it yourself
+            </a>
+          </div>
+        </div>
+        <div class="border border-white p-12 my-8 rounded-md" id="team">
+          <p class="text-2xl mb-2 font-semibold">
+            Our Team
+          </p>
+          <hr class="h-[0.05em] bg-white w-1/2">
+          <div class="mt-5 lg:columns-4">
+            <div class="p-5 border border-white text-center hover:bg-white hover:text-black duration-400 transition-all">
+              <img src="{{ url_for('static', filename='img/devan.jpg') }}" alt="" class="max-h-[200px] mx-auto">
+              <p class="text-lg mt-2">
+                Devan
+              </p>
+            </div>
+            <div class="p-5 border border-white text-center hover:bg-white hover:text-black duration-400 transition-all">
+              <img src="{{ url_for('static', filename='img/dayu.jpg') }}" alt="" class="max-h-[200px] mx-auto">
+              <p class="text-lg mt-2">
+                Dayu
+              </p>
+            </div>
+            <div class="p-5 border border-white text-center hover:bg-white hover:text-black duration-400 transition-all">
+              <img src="{{ url_for('static', filename='img/leo.jpg') }}" alt="" class="max-h-[200px] mx-auto">
+              <p class="text-lg mt-2">
+                Leo
+              </p>
+            </div>
+            <div class="p-5 border border-white text-center hover:bg-white hover:text-black duration-400 transition-all">
+              <img src="{{ url_for('static', filename='img/rahmat.jpg') }}" alt="" class="max-h-[200px] mx-auto">
+              <p class="text-lg mt-2">
+                Rahmat
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

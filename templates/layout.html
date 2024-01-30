@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dist/index.css') }}">
+    <link rel="stylesheet" href="../static/dist/index.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 24 24'%3E%3Cpath fill='currentColor' d='M9 11.75A1.25 1.25 0 0 0 7.75 13A1.25 1.25 0 0 0 9 14.25A1.25 1.25 0 0 0 10.25 13A1.25 1.25 0 0 0 9 11.75m6 0A1.25 1.25 0 0 0 13.75 13A1.25 1.25 0 0 0 15 14.25A1.25 1.25 0 0 0 16.25 13A1.25 1.25 0 0 0 15 11.75M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18a8 8 0 0 1-8-8a4.12 4.12 0 0 1 0-.86a10.05 10.05 0 0 0 5.26-5.37A9.985 9.985 0 0 0 17.42 10c.76 0 1.51-.09 2.25-.26c1.25 4.26-1.17 8.69-5.41 9.93c-.76.22-1.5.33-2.26.33M0 2a2 2 0 0 1 2-2h4v2H2v4H0zm24 20a2 2 0 0 1-2 2h-4v-2h4v-4h2zM2 24a2 2 0 0 1-2-2v-4h2v4h4v2zM22 0a2 2 0 0 1 2 2v4h-2V2h-4V0z'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <title>{% block title %}Flask Face Recognition{% endblock %}</title>
+</head>
+<body class="font-roboto bg-black">
+  <nav class="flex items-center justify-between flex-wrap p-6">
+    <div class="flex items-center flex-shrink-0 text-white mr-6">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" class="mr-5"><path fill="currentColor" d="M9 11.75A1.25 1.25 0 0 0 7.75 13A1.25 1.25 0 0 0 9 14.25A1.25 1.25 0 0 0 10.25 13A1.25 1.25 0 0 0 9 11.75m6 0A1.25 1.25 0 0 0 13.75 13A1.25 1.25 0 0 0 15 14.25A1.25 1.25 0 0 0 16.25 13A1.25 1.25 0 0 0 15 11.75M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 18a8 8 0 0 1-8-8a4.12 4.12 0 0 1 0-.86a10.05 10.05 0 0 0 5.26-5.37A9.985 9.985 0 0 0 17.42 10c.76 0 1.51-.09 2.25-.26c1.25 4.26-1.17 8.69-5.41 9.93c-.76.22-1.5.33-2.26.33M0 2a2 2 0 0 1 2-2h4v2H2v4H0zm24 20a2 2 0 0 1-2 2h-4v-2h4v-4h2zM2 24a2 2 0 0 1-2-2v-4h2v4h4v2zM22 0a2 2 0 0 1 2 2v4h-2V2h-4V0z"/></svg>
+      <span class="font-semibold text-2xl tracking-tight">DDLR</span>
+    </div>
+    <div class="block lg:hidden">
+      <button class="flex items-center px-3 py-2 border rounded text-white hover:text-sky-400" onclick="toggle_nav()">
+        <iconify-icon icon="mdi:face-recognition"></iconify-icon>
+      </button>
+    </div>
+    <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden" id="nav-links">
+      <div class="text-md lg:flex-grow text-white">
+        <a href="{{ url_for('home') }}" class="block mt-4 lg:inline-block lg:mt-0 mr-4 hover:text-gray-300">
+          Home
+        </a>
+        <a href="{{ url_for('demo') }}" class="block mt-4 lg:inline-block lg:mt-0 mr-4 hover:text-gray-300">
+          Demo
+        </a>
+      </div>
+    </div>
+  </nav>
+  <hr class="h-[0.05em] bg-white-500 text-white-500">
+  <section>
+    {% block content %}{% endblock %}
+  </section>
+  <footer class="text-white ">
+    <div class="flex flex-wrap w-full mx-auto max-w-screen-xl p-4">
+      <span class="text-sm  sm:text-center">
+        © 2023 DDLR FRA
+      </span>
+      <div class="flex flex-wrap ml-auto lg:mr-10">
+        <a href="" class="mx-2">Devan</a>
+        <a href="" class="mx-2">Dayu</a>
+        <a href="" class="mx-2">Leo</a>
+        <a href="" class="mx-2">Rahmat</a>
+      </div>
+    </div>
+  </footer>
+</body>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</html>
